@@ -45,10 +45,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
         if(view.getId()==R.id.save)
         {
             drawView.postJson();
-            Toast.makeText(MainActivity.this,
-                    "JSON send to database", Toast.LENGTH_LONG).show();
             drawView.setVisibility(View.INVISIBLE);
-            txtViewDesc.setText("");
+            txtViewDesc.setText("send to database");
             txtViewData.setText("");
 
         }

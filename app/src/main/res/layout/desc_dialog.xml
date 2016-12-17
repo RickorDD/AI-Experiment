@@ -14,11 +14,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="text"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
         android:hint="Description"
         android:id="@+id/txtDesc" />
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/okButton"
-        android:text="OK" />
+        android:text="OK"
+        android:layout_marginLeft="150dp"
+        android:layout_marginRight="150dp" />
 </LinearLayout>
