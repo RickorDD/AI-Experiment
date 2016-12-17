@@ -3,7 +3,6 @@ package de.reikodd.ddweki;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -36,6 +35,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
     {
         if(view.getId()==R.id.clear)
         {
+            txtViewDesc.setText("");
+            txtViewData.setText("");
             drawView.setVisibility(View.INVISIBLE);
             showDialog();
 
@@ -60,6 +61,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         Button bDesc = (Button) mView.findViewById(R.id.okButton);
         mBuilder.setView(mView);
         final AlertDialog dialog = mBuilder.create();
+        dialog.setCancelable(false);
         dialog.show();
         bDesc.setOnClickListener(new View.OnClickListener() {
             @Override
