@@ -7,12 +7,14 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends Activity implements View.OnClickListener {
 
     private DrawingView drawView;
     private Button clearButton,saveButton;
+    private TextView txtViewDesc, txtViewData;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -23,6 +25,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
         clearButton.setOnClickListener(this);
         saveButton = (Button) findViewById(R.id.save);
         saveButton.setOnClickListener(this);
+        txtViewDesc = (TextView) findViewById(R.id.description);
+        txtViewData = (TextView) findViewById(R.id.Data);
+        drawView.setVisibility(View.INVISIBLE);
         getActionBar().setTitle("DDWEKI     Version:" + BuildConfig.VERSION_NAME);
     }
 
@@ -31,8 +36,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
     {
         if(view.getId()==R.id.clear)
         {
+            drawView.setVisibility(View.INVISIBLE);
             showDialog();
-            drawView.startNew();
+
         }
 
         if(view.getId()==R.id.save)
@@ -40,21 +46,30 @@ public class MainActivity extends Activity implements View.OnClickListener {
             drawView.postJson();
             Toast.makeText(MainActivity.this,
                     "JSON send to database", Toast.LENGTH_LONG).show();
-            drawView.startNew();
+            drawView.setVisibility(View.INVISIBLE);
+            txtViewDesc.setText("");
+            txtViewData.setText("");
+
         }
       }
 
     private void showDialog() {
-        AlertDialog.Builder mBuilder = new AlertDialog.Builder(MainActivity.this);
-        View mView = getLayoutInflater().inflate(R.layout.desc_dialog, null);
+        final AlertDialog.Builder mBuilder = new AlertDialog.Builder(MainActivity.this);
+        final View mView = getLayoutInflater().inflate(R.layout.desc_dialog, null);
         final EditText textDesc = (EditText) mView.findViewById(R.id.txtDesc);
         Button bDesc = (Button) mView.findViewById(R.id.okButton);
+        mBuilder.setView(mView);
+        final AlertDialog dialog = mBuilder.create();
+        dialog.show();
         bDesc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view){
                 if(!textDesc.getText().toString().isEmpty()){
-                    Toast.makeText(MainActivity.this,"Succesfull",Toast.LENGTH_SHORT).show();
-                    Log.i("Reiko",textDesc.getText().toString());
+                    Toast.makeText(MainActivity.this,"Sucessfull",Toast.LENGTH_SHORT).show();
+                    dialog.dismiss();
+                    drawView.setVisibility(View.VISIBLE);
+                    drawView.startNew();
+                    txtViewDesc.setText(textDesc.getText().toString().replaceAll("\"",""));
                 }
                 else
                 {
@@ -62,8 +77,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 }
             }
         });
-        mBuilder.setView(mView);
-        AlertDialog dialog = mBuilder.create();
-        dialog.show();
+
     }
 }

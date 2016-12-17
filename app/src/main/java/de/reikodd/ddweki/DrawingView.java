@@ -12,6 +12,7 @@ import android.os.Build;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -147,9 +148,7 @@ public class DrawingView extends View {
     }
 
     public void postJson(){
-        EditText desctxt = (EditText) ((Activity)context).findViewById(R.id.Description);
-        String description = desctxt.getText().toString();
-
+            TextView txtView = (TextView) ((Activity) context).findViewById(R.id.description);
             StringBuilder sb = new StringBuilder();
 
             sb.append("[{\"strokes\":");
@@ -157,7 +156,7 @@ public class DrawingView extends View {
             sb.append(",");
 
             sb.append("\"description\":\"");
-            sb.append(description);
+            sb.append(txtView.getText().toString());
             sb.append("\",");
 
             sb.append("\"client\":\"");
