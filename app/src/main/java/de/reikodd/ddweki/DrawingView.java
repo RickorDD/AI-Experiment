@@ -11,22 +11,11 @@ import android.graphics.PorterDuff;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Locale;
 
 /**
@@ -77,8 +66,8 @@ public class DrawingView extends View {
 
     public void startNew() {
         drawCanvas.drawColor(0, PorterDuff.Mode.CLEAR);
-        TextView txtView = (TextView) ((Activity) context).findViewById(R.id.Data);
-        txtView.setText("");
+        TextView txtViewData = (TextView) ((Activity) context).findViewById(R.id.Data);
+        txtViewData.setText("");
         jsonCreate.clear();
         invalidate();
         startTime = System.currentTimeMillis();
@@ -121,14 +110,14 @@ public class DrawingView extends View {
 
                 double showTimeDouble = (double) (System.currentTimeMillis() - startTime) / 1000.;
                 String jsonOutput = "{" + TextUtils.join(",", new String[]{
-                    JsonHashEntry("x", event.getX()),
-                    JsonHashEntry("y", event.getY()),
-                    JsonHashEntry("t", showTimeDouble),
-                    JsonHashEntry("p", event.getPressure())
+                        JsonHashEntry("x", event.getX()),
+                        JsonHashEntry("y", event.getY()),
+                        JsonHashEntry("t", showTimeDouble),
+                        JsonHashEntry("p", event.getPressure())
                 }) + "}";
 
-                TextView txtView = (TextView) ((Activity) context).findViewById(R.id.Data);
-                txtView.setText(jsonOutput);
+                TextView txtViewData = (TextView) ((Activity) context).findViewById(R.id.Data);
+                txtViewData.setText(jsonOutput);
 
                 jsonCreate.addStroke(jsonOutput);
                 break;
@@ -138,7 +127,6 @@ public class DrawingView extends View {
                 drawCanvas.drawPath(drawPath, drawPaint);
                 drawPath.reset();
                 jsonCreate.endStroke();
-                Log.i("Reiko", "neuer Stroke");
                 break;
             default:
                 return false;
@@ -148,23 +136,23 @@ public class DrawingView extends View {
     }
 
     public void postJson(){
-            TextView txtView = (TextView) ((Activity) context).findViewById(R.id.description);
-            StringBuilder sb = new StringBuilder();
+        TextView txtViewDesc = (TextView) ((Activity) context).findViewById(R.id.description);
+        StringBuilder sb = new StringBuilder();
 
-            sb.append("[{\"strokes\":");
-            sb.append(jsonCreate.getJSON());
-            sb.append(",");
+        sb.append("[{\"strokes\":");
+        sb.append(jsonCreate.getJSON());
+        sb.append(",");
 
-            sb.append("\"description\":\"");
-            sb.append(txtView.getText().toString());
-            sb.append("\",");
+        sb.append("\"description\":\"");
+        sb.append(txtViewDesc.getText().toString());
+        sb.append("\",");
 
-            sb.append("\"client\":\"");
-            sb.append(DeviceModel);
-            sb.append("\"");
-            sb.append("}]");
+        sb.append("\"client\":\"");
+        sb.append(DeviceModel);
+        sb.append("\"");
+        sb.append("}]");
 
-            new URLConnection().execute("http://52.212.255.218/datas/",sb.toString());
-            //new URLConnection().execute("http://groens.ch/ai-experment-api/datas",sb.toString());
-        }
+        new URLConnection(context).execute("http://52.212.255.218/datas/",sb.toString());
+        //new URLConnection().execute("http://groens.ch/ai-experment-api/datas",sb.toString());
+    }
 }

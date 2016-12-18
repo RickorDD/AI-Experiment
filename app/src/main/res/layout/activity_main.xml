@@ -29,16 +29,14 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="30dp"
-        android:descendantFocusability="beforeDescendants"
-        android:focusable="true"
-        android:focusableInTouchMode="true">
+        android:layout_gravity="center">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/description"
-            android:textSize="20dp" />
-
+            android:textSize="20dp"
+            />
     </LinearLayout>
 
     <LinearLayout

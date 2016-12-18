@@ -46,11 +46,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
         {
             drawView.postJson();
             drawView.setVisibility(View.INVISIBLE);
-            txtViewDesc.setText("send to database");
             txtViewData.setText("");
-
         }
-      }
+    }
+
+
+
 
     private void showDialog() {
         final AlertDialog.Builder mBuilder = new AlertDialog.Builder(MainActivity.this);
@@ -65,7 +66,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             @Override
             public void onClick(View view){
                 if(!textDesc.getText().toString().isEmpty()){
-                    Toast.makeText(MainActivity.this,"Sucessfull",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this,"Sucessfull",Toast.LENGTH_LONG).show();
                     dialog.dismiss();
                     drawView.setVisibility(View.VISIBLE);
                     drawView.startNew();
@@ -73,7 +74,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 }
                 else
                 {
-                    Toast.makeText(MainActivity.this,"Not fill!",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this,"Not fill!",Toast.LENGTH_LONG).show();
                 }
             }
         });
