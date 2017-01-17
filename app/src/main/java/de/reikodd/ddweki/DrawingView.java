@@ -29,6 +29,7 @@ public class DrawingView extends View {
     private Bitmap canvasBitmap;
     static long startTime = 0;
     static String DeviceModel = Build.MODEL;
+    String reqName = "Reiko";
 
     static DecimalFormat decimalFormat = new DecimalFormat("0.00000", new DecimalFormatSymbols(Locale.US));
     JSONCreate jsonCreate = new JSONCreate();
@@ -138,7 +139,7 @@ public class DrawingView extends View {
     public void postJson(){
         TextView txtViewDesc = (TextView) ((Activity) context).findViewById(R.id.description);
         StringBuilder sb = new StringBuilder();
-
+        sb.append("[{\"archive\":");
         sb.append("[{\"strokes\":");
         sb.append(jsonCreate.getJSON());
         sb.append(",");
@@ -150,6 +151,8 @@ public class DrawingView extends View {
         sb.append("\"client\":\"");
         sb.append(DeviceModel);
         sb.append("\"");
+        sb.append("}],");
+        sb.append("\"request_id\":\"NA\", \"author_id\" :\"" + reqName + "\"");
         sb.append("}]");
 
         new URLConnection(context).execute("http://52.212.255.218/datas/",sb.toString());
