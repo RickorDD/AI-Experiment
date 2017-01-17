@@ -74,7 +74,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 }
                 else
                 {
-                    Toast.makeText(MainActivity.this,"Not fill!",Toast.LENGTH_LONG).show();
+                    textDesc.setError("set a Letter!");
+                    //Toast.makeText(MainActivity.this,"Not fill!",Toast.LENGTH_LONG).show();
                 }
             }
         });
