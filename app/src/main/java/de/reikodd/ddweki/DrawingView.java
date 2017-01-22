@@ -9,11 +9,14 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.os.Build;
-import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
@@ -31,7 +34,7 @@ public class DrawingView extends View {
     static String DeviceModel = Build.MODEL;
     String reqName = "Reiko";
 
-    static DecimalFormat decimalFormat = new DecimalFormat("0.00000", new DecimalFormatSymbols(Locale.US));
+    static DecimalFormat decimalFormat = new DecimalFormat("0.0", new DecimalFormatSymbols(Locale.US));
     JSONCreate jsonCreate = new JSONCreate();
     Context context;
 
@@ -91,10 +94,6 @@ public class DrawingView extends View {
         drawCanvas.drawColor(Color.WHITE);
     }
 
-    static String JsonHashEntry(String key, double value) {
-        return "\"" + key + "\":" + decimalFormat.format(value);
-    }
-
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 
@@ -109,19 +108,21 @@ public class DrawingView extends View {
             case MotionEvent.ACTION_MOVE:
                 drawPath.lineTo(touchX, touchY);
 
-                double showTimeDouble = (double) (System.currentTimeMillis() - startTime) / 1000.;
-                String jsonOutput = "{" + TextUtils.join(",", new String[]{
-                        JsonHashEntry("x", event.getX()),
-                        JsonHashEntry("y", event.getY()),
-                        JsonHashEntry("t", showTimeDouble),
-                        JsonHashEntry("p", event.getPressure())
-                }) + "}";
+                double showTimeDouble = (double) (System.currentTimeMillis() - startTime);
+                try {
+                    JSONObject jsonXYTP = new JSONObject();
+                    jsonXYTP.put("x", decimalFormat.format(event.getX()));
+                    jsonXYTP.put("y", decimalFormat.format(event.getY()));
+                    jsonXYTP.put("t", decimalFormat.format(showTimeDouble));
+                    jsonXYTP.put("p", decimalFormat.format(event.getPressure()));
 
-                TextView txtViewData = (TextView) ((Activity) context).findViewById(R.id.Data);
-                txtViewData.setText(jsonOutput);
+                    TextView txtViewData = (TextView) ((Activity) context).findViewById(R.id.Data);
+                    txtViewData.setText(jsonXYTP.toString());
 
-                jsonCreate.addStroke(jsonOutput);
-                break;
+                    jsonCreate.addStroke(jsonXYTP.toString());
+                    break;
+                } catch (JSONException e) {
+                }
 
             case MotionEvent.ACTION_UP:
                 drawPath.lineTo(touchX, touchY);
@@ -136,26 +137,27 @@ public class DrawingView extends View {
         return true;
     }
 
-    public void postJson(){
+    public void postJson() {
         TextView txtViewDesc = (TextView) ((Activity) context).findViewById(R.id.description);
-        StringBuilder sb = new StringBuilder();
-        sb.append("[{\"archive\":");
-        sb.append("[{\"strokes\":");
-        sb.append(jsonCreate.getJSON());
-        sb.append(",");
 
-        sb.append("\"description\":\"");
-        sb.append(txtViewDesc.getText().toString());
-        sb.append("\",");
+            StringBuilder sb = new StringBuilder();
+            sb.append("{\"archive\":");
+            sb.append("[{\"strokes\":");
+            sb.append(jsonCreate.getJSON());
+            sb.append(",");
 
-        sb.append("\"client\":\"");
-        sb.append(DeviceModel);
-        sb.append("\"");
-        sb.append("}],");
-        sb.append("\"request_id\":\"NA\", \"author_id\" :\"" + reqName + "\"");
-        sb.append("}]");
+            sb.append("\"description\":\"");
+            sb.append(txtViewDesc.getText().toString());
+            sb.append("\",");
 
-        new URLConnection(context).execute("http://52.212.255.218/datas/",sb.toString());
-        //new URLConnection().execute("http://groens.ch/ai-experment-api/datas",sb.toString());
+            sb.append("\"client\":\"");
+            sb.append(DeviceModel);
+            sb.append("\"");
+            sb.append("}],");
+            sb.append("\"request_id\":\"NA\", \"author_id\" :\"" + reqName + "\"");
+            sb.append("}");
+
+            new URLConnection(context).execute("http://52.212.255.218/datas/", sb.toString());
+            //new URLConnection().execute("http://groens.ch/ai-experment-api/datas",sb.toString());
+        }
     }
-}
