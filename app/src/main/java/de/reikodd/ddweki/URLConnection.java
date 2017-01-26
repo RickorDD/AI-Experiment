@@ -29,16 +29,16 @@ public class URLConnection extends AsyncTask<String, String, String> {
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setDoOutput(true);
             conn.setRequestMethod("POST");
-            conn.setRequestProperty("connection", "close");
+            conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
             OutputStream os = conn.getOutputStream();
             os.write(input.getBytes());
             os.flush();
             if(conn.getResponseCode() == 200) {
-                Log.i("Reiko", "" + urls[0] + " - POST Success " + conn.getResponseCode());
+                //Log.i("Reiko", "" + urls[0] + " - POST Success " + conn.getResponseCode());
             }
             else
             {
-                Log.i("Reiko", "Fehler: " + "" + conn.getResponseCode());
+                //Log.i("Reiko", "Fehler: " + "" + conn.getResponseCode());
             }
             conn.disconnect();
 
@@ -46,10 +46,10 @@ public class URLConnection extends AsyncTask<String, String, String> {
 
         } catch (MalformedURLException rat) {
             rat.printStackTrace();
-            Log.i("Reiko", ""+rat);
+            //Log.i("Reiko", ""+rat);
             return "0";
         } catch (Exception rat) {
-            Log.i("Reiko", ""+rat);
+            //Log.i("Reiko", ""+rat);
             return "0";
         }
     }

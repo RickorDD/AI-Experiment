@@ -1,6 +1,13 @@
 package de.reikodd.ddweki;
 
+import android.app.Activity;
+import android.content.Context;
+import android.os.Build;
 import android.text.TextUtils;
+import android.widget.TextView;
+
+import org.json.JSONArray;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,8 +24,10 @@ public class JSONCreate {
         stroke.clear();
     }
 
-    public String getJSON() {
-        return "[" + TextUtils.join(",", strokes) + "]";
+    public String getJSON(String description) {
+        return "{\"client\":\"" + Build.MODEL + "\","
+                + "\"description\":\"" + description + "\"," +
+                "\"strokes\":[" + TextUtils.join(",", strokes) + "]}";
     }
 
     public void clear() {

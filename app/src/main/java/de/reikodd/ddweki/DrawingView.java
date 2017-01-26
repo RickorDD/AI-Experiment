@@ -8,7 +8,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PorterDuff;
-import android.os.Build;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -19,6 +18,8 @@ import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -31,9 +32,9 @@ public class DrawingView extends View {
     private Canvas drawCanvas;
     private Bitmap canvasBitmap;
     static long startTime = 0;
-    static String DeviceModel = Build.MODEL;
     String reqName = "Reiko";
-
+    static List<String> archive = new ArrayList<String>();
+    static int strokes = 0;
     static DecimalFormat decimalFormat = new DecimalFormat("0.0", new DecimalFormatSymbols(Locale.US));
     JSONCreate jsonCreate = new JSONCreate();
     Context context;
@@ -67,16 +68,6 @@ public class DrawingView extends View {
         drawPaint.setStyle(Paint.Style.STROKE);
         canvasPaint = new Paint(Paint.DITHER_FLAG);
     }
-
-    public void startNew() {
-        drawCanvas.drawColor(0, PorterDuff.Mode.CLEAR);
-        TextView txtViewData = (TextView) ((Activity) context).findViewById(R.id.Data);
-        txtViewData.setText("");
-        jsonCreate.clear();
-        invalidate();
-        startTime = System.currentTimeMillis();
-    }
-
 
     @Override
     protected void onDraw(Canvas canvas) {
@@ -137,27 +128,34 @@ public class DrawingView extends View {
         return true;
     }
 
-    public void postJson() {
-        TextView txtViewDesc = (TextView) ((Activity) context).findViewById(R.id.description);
-
-            StringBuilder sb = new StringBuilder();
-            sb.append("{\"archive\":");
-            sb.append("[{\"strokes\":");
-            sb.append(jsonCreate.getJSON());
-            sb.append(",");
-
-            sb.append("\"description\":\"");
-            sb.append(txtViewDesc.getText().toString());
-            sb.append("\",");
-
-            sb.append("\"client\":\"");
-            sb.append(DeviceModel);
-            sb.append("\"");
-            sb.append("}],");
-            sb.append("\"request_id\":\"NA\", \"author_id\" :\"" + reqName + "\"");
-            sb.append("}");
-
-            new URLConnection(context).execute("http://52.212.255.218/datas/", sb.toString());
-            //new URLConnection().execute("http://groens.ch/ai-experment-api/datas",sb.toString());
+    public void New(String description) {
+        drawCanvas.drawColor(0, PorterDuff.Mode.CLEAR);
+        TextView txtViewData = (TextView) ((Activity) context).findViewById(R.id.Data);
+        txtViewData.setText("");
+        if (strokes!=0)
+        {
+            archive.add(jsonCreate.getJSON(description));
         }
+        strokes++;
+        jsonCreate.clear();
+        invalidate();
+        startTime = System.currentTimeMillis();
     }
+
+    public void Save(String description) {
+        //Button Save
+        archive.add(jsonCreate.getJSON(description));
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("{\"archive\":");
+        sb.append(archive);
+        sb.append(",");
+        sb.append("\"author_id\":\""+ reqName + "\"");
+        sb.append(",");
+        sb.append("\"request_id\":\"123\"");
+        sb.append("}");
+        strokes = 0;
+        archive.clear();
+        new URLConnection(context).execute("http://52.212.255.218/datas/", sb.toString());
+    }
+}

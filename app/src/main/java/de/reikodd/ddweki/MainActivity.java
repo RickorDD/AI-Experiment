@@ -7,13 +7,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class MainActivity extends Activity implements View.OnClickListener {
 
     private DrawingView drawView;
     private Button clearButton,saveButton;
     private TextView txtViewDesc, txtViewData;
+    String DescString="";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -39,12 +39,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
             txtViewData.setText("");
             drawView.setVisibility(View.INVISIBLE);
             showDialog();
-
+            drawView.New(DescString);
         }
 
         if(view.getId()==R.id.save)
         {
-            drawView.postJson();
+            drawView.Save(DescString);
             drawView.setVisibility(View.INVISIBLE);
             txtViewData.setText("");
         }
@@ -66,11 +66,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
             @Override
             public void onClick(View view){
                 if(!textDesc.getText().toString().isEmpty()){
-                    Toast.makeText(MainActivity.this,"Sucessfull",Toast.LENGTH_LONG).show();
                     dialog.dismiss();
                     drawView.setVisibility(View.VISIBLE);
-                    drawView.startNew();
-                    txtViewDesc.setText(textDesc.getText().toString().replaceAll("\"",""));
+                    DescString = textDesc.getText().toString().replaceAll("\"","");
+                    txtViewDesc.setText(DescString);
                 }
                 else
                 {
