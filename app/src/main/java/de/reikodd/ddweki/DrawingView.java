@@ -9,8 +9,10 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import org.json.JSONException;
@@ -35,6 +37,8 @@ public class DrawingView extends View {
     String reqName = "Reiko";
     static List<String> archive = new ArrayList<String>();
     static int strokes = 0;
+    static int characterChallenge=0;
+    static boolean allCharacter=false;
     static DecimalFormat decimalFormat = new DecimalFormat("0.0", new DecimalFormatSymbols(Locale.US));
     JSONCreate jsonCreate = new JSONCreate();
     Context context;
@@ -106,10 +110,14 @@ public class DrawingView extends View {
                     jsonXYTP.put("y", decimalFormat.format(event.getY()));
                     jsonXYTP.put("t", decimalFormat.format(showTimeDouble));
                     jsonXYTP.put("p", decimalFormat.format(event.getPressure()));
+                    Button   nextButton = (Button ) ((Activity) context).findViewById(R.id.next);
+                    Button saveButton = (Button) ((Activity) context).findViewById(R.id.save);
+                    nextButton.setEnabled(true);
 
-                    TextView txtViewData = (TextView) ((Activity) context).findViewById(R.id.Data);
-                    txtViewData.setText(jsonXYTP.toString());
-
+                    if(allCharacter==true) {
+                        nextButton.setEnabled(false);
+                        saveButton.setEnabled(true);
+                    }
                     jsonCreate.addStroke(jsonXYTP.toString());
                     break;
                 } catch (JSONException e) {
@@ -128,23 +136,31 @@ public class DrawingView extends View {
         return true;
     }
 
-    public void New(String description) {
+    public void New(String content, int numberChallenge) {
         drawCanvas.drawColor(0, PorterDuff.Mode.CLEAR);
+
         TextView txtViewData = (TextView) ((Activity) context).findViewById(R.id.Data);
-        txtViewData.setText("");
+        txtViewData.setText("Write a \"" + JSONParser.getCharacterDescSet(content, numberChallenge, characterChallenge)+ "\"");
         if (strokes!=0)
         {
-            archive.add(jsonCreate.getJSON(description));
+            archive.add(jsonCreate.getJSON(JSONParser.getCharacterDescSet(content, numberChallenge, characterChallenge-1)));
+        }
+        if((JSONParser.getNumberDescSet(content,numberChallenge)-1)==characterChallenge)
+        {
+            Button   nextButton = (Button ) ((Activity) context).findViewById(R.id.next);
+            nextButton.setEnabled(false);
+            allCharacter=true;
         }
         strokes++;
+        characterChallenge++;
         jsonCreate.clear();
         invalidate();
         startTime = System.currentTimeMillis();
     }
 
-    public void Save(String description) {
+    public void Save(String content, int numberChallenge) {
         //Button Save
-        archive.add(jsonCreate.getJSON(description));
+        archive.add(jsonCreate.getJSON(JSONParser.getCharacterDescSet(content, numberChallenge, characterChallenge-1)));
 
         StringBuilder sb = new StringBuilder();
         sb.append("{\"archive\":");
@@ -155,7 +171,9 @@ public class DrawingView extends View {
         sb.append("\"request_id\":\"123\"");
         sb.append("}");
         strokes = 0;
+        characterChallenge=0;
+        allCharacter=false;
         archive.clear();
-        new URLConnection(context).execute("http://52.212.255.218/datas/", sb.toString());
+        new URLPost(context).execute("http://52.212.255.218/datas/", sb.toString());
     }
 }
