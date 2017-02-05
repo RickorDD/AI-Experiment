@@ -140,7 +140,7 @@ public class DrawingView extends View {
         drawCanvas.drawColor(0, PorterDuff.Mode.CLEAR);
 
         TextView txtViewData = (TextView) ((Activity) context).findViewById(R.id.Data);
-        txtViewData.setText("Write a \"" + JSONParser.getCharacterDescSet(content, numberChallenge, characterChallenge)+ "\"");
+        txtViewData.setText("Draw a \"" + JSONParser.getCharacterDescSet(content, numberChallenge, characterChallenge)+ "\"");
         if (strokes!=0)
         {
             archive.add(jsonCreate.getJSON(JSONParser.getCharacterDescSet(content, numberChallenge, characterChallenge-1)));
@@ -159,21 +159,20 @@ public class DrawingView extends View {
     }
 
     public void Save(String content, int numberChallenge) {
-        //Button Save
         archive.add(jsonCreate.getJSON(JSONParser.getCharacterDescSet(content, numberChallenge, characterChallenge-1)));
-
         StringBuilder sb = new StringBuilder();
         sb.append("{\"archive\":");
         sb.append(archive);
         sb.append(",");
-        sb.append("\"author_id\":\""+ reqName + "\"");
+        sb.append("\"author\":\""+ reqName + "\"");
         sb.append(",");
-        sb.append("\"request_id\":\"123\"");
+        sb.append("\"challenge_id\":\"" + JSONParser.getChallengeID(content, numberChallenge));
         sb.append("}");
         strokes = 0;
         characterChallenge=0;
         allCharacter=false;
         archive.clear();
         new URLPost(context).execute("http://52.212.255.218/datas/", sb.toString());
+        //new URLPost(context).execute("https://sheltered-fjord-46378.herokuapp.com/api/submissions", sb.toString());
     }
 }

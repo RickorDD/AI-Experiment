@@ -18,6 +18,19 @@ public class JSONParser {
         }
     }
 
+
+    public static int getChallengeID(String content, int challenge) {
+        try {
+            JSONObject jsObjChallenges = new JSONObject(content);
+            JSONArray jsArrChallenges = jsObjChallenges
+                    .getJSONArray("challenges");
+            return jsArrChallenges.getJSONObject(challenge).getInt("id");
+        } catch (JSONException je) {
+            return 0;
+        }
+    }
+
+
     public static String getNameChallenge(String content, int challenge) {
 
         try {

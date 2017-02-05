@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -12,7 +11,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class MainActivity extends Activity implements View.OnClickListener, URLInterface {
 
@@ -52,10 +50,6 @@ public class MainActivity extends Activity implements View.OnClickListener, URLI
     {
         if(view.getId()==R.id.next)
         {
-            //txtViewDesc.setText("");
-            //txtViewData.setText("");
-            //drawView.setVisibility(View.INVISIBLE);
-            //showDialog();
             nextButton.setEnabled(false);
             drawView.New(jsData, numberChallenge);
         }
@@ -73,12 +67,11 @@ public class MainActivity extends Activity implements View.OnClickListener, URLI
         if(view.getId()==R.id.challenges)
         {
             putURLConnection();
-            //showDialogChallenge();
         }
     }
 
     private void putURLConnection(){
-        new URLConnection(MainActivity.this).execute("http://52.212.255.218:3000/challenges");
+        new URLConnection(MainActivity.this).execute("https://sheltered-fjord-46378.herokuapp.com/api/challenges");
     }
 
 
@@ -90,13 +83,12 @@ public class MainActivity extends Activity implements View.OnClickListener, URLI
         }
         else
         {
-            //Toast.makeText(context, "no connection!",Toast.LENGTH_LONG).show();
             showNoConnection();
         }
     }
 
     private void showNoConnection() {
-        txtViewDesc.setText("no connection !");
+        txtViewDesc.setText("no challenges or not connection!");
     }
 
 
@@ -131,7 +123,7 @@ public class MainActivity extends Activity implements View.OnClickListener, URLI
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 numberChallenge=lstChallenges.getPositionForView(view);
                 txtViewDesc.setText(JSONParser.getNameChallenge(jsData, lstChallenges.getPositionForView(view))
-                + " " + JSONParser.getDetailsChallenge(jsData, lstChallenges.getPositionForView(view)));
+                + " - " + JSONParser.getDetailsChallenge(jsData, lstChallenges.getPositionForView(view)));
                 drawView.setVisibility(View.VISIBLE);
                 challengeButton.setEnabled(false);
                 drawView.New(jsData, lstChallenges.getPositionForView(view));
@@ -139,38 +131,15 @@ public class MainActivity extends Activity implements View.OnClickListener, URLI
             }
         });
 
-        txtViewNumberChallenges.setText(JSONParser.getNumberChallenges(jsData) + " Challenges");
+        if (numberChallenge>1) {
+            txtViewNumberChallenges.setText(JSONParser.getNumberChallenges(jsData) + " Challenges");
+        }
+        else
+        {
+            txtViewNumberChallenges.setText(JSONParser.getNumberChallenges(jsData) + " Challenge");
+        }
+
         dialog.setCancelable(false);
         dialog.show();
     }
-
-
-    /*
-    private void showDialog() {
-        final AlertDialog.Builder mBuilder = new AlertDialog.Builder(MainActivity.this);
-        final View mView = getLayoutInflater().inflate(R.layout.desc_dialog, null);
-        final EditText textDesc = (EditText) mView.findViewById(R.id.txtDesc);
-        Button bDesc = (Button) mView.findViewById(R.id.okButton);
-        mBuilder.setView(mView);
-        final AlertDialog dialog = mBuilder.create();
-        dialog.setCancelable(false);
-        dialog.show();
-        bDesc.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view){
-                if(!textDesc.getText().toString().isEmpty()){
-                    dialog.dismiss();
-                    drawView.setVisibility(View.VISIBLE);
-                    DescString = textDesc.getText().toString().replaceAll("\"","");
-                    txtViewDesc.setText(DescString);
-                }
-                else
-                {
-                    textDesc.setError("set a Letter!");
-                }
-            }
-        });
-
-    }
-    */
 }
