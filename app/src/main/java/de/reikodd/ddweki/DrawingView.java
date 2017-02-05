@@ -161,18 +161,17 @@ public class DrawingView extends View {
     public void Save(String content, int numberChallenge) {
         archive.add(jsonCreate.getJSON(JSONParser.getCharacterDescSet(content, numberChallenge, characterChallenge-1)));
         StringBuilder sb = new StringBuilder();
-        sb.append("{\"archive\":");
+        sb.append("{\"submission\":{\"archive\":");
         sb.append(archive);
         sb.append(",");
         sb.append("\"author\":\""+ reqName + "\"");
         sb.append(",");
-        sb.append("\"challenge_id\":\"" + JSONParser.getChallengeID(content, numberChallenge));
-        sb.append("}");
+        sb.append("\"challenge_id\":" + JSONParser.getChallengeID(content, numberChallenge));
+        sb.append("}}");
         strokes = 0;
         characterChallenge=0;
         allCharacter=false;
         archive.clear();
-        new URLPost(context).execute("http://52.212.255.218/datas/", sb.toString());
-        //new URLPost(context).execute("https://sheltered-fjord-46378.herokuapp.com/api/submissions", sb.toString());
+        new URLPost(context).execute("https://sheltered-fjord-46378.herokuapp.com/api/submissions", sb.toString());
     }
 }
