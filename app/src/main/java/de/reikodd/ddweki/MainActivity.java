@@ -56,15 +56,15 @@ public class MainActivity extends Activity implements View.OnClickListener, URLI
         if(view.getId()==R.id.save)
         {
             drawView.Save(jsData, numberChallenge);
-            drawView.setVisibility(View.INVISIBLE);
             saveButton.setEnabled(false);
-            challengeButton.setEnabled(true);
-            drawView.setVisibility(View.INVISIBLE);
             txtViewData.setText("");
+            drawView.setVisibility(View.INVISIBLE);
         }
 
         if(view.getId()==R.id.challenges)
         {
+            txtViewDesc.setText("Loading...");
+            challengeButton.setEnabled(false);
             putURLConnection();
         }
     }
@@ -87,12 +87,15 @@ public class MainActivity extends Activity implements View.OnClickListener, URLI
     }
 
     private void showNoConnection() {
+
         txtViewDesc.setText("no challenges or not connection!");
+        challengeButton.setEnabled(true);
     }
 
 
     private void showDialogChallenge()
     {
+        txtViewDesc.setText("");
         final AlertDialog.Builder mBuilder = new AlertDialog.Builder(MainActivity.this);
         final View mView = getLayoutInflater().inflate(R.layout.challenge_dialog, null);
         final TextView txtViewNumberChallenges = (TextView) mView.findViewById(R.id.txtChallenge);
@@ -124,7 +127,6 @@ public class MainActivity extends Activity implements View.OnClickListener, URLI
                 txtViewDesc.setText(JSONParser.getNameChallenge(jsData, lstChallenges.getPositionForView(view))
                 + " - " + JSONParser.getDetailsChallenge(jsData, lstChallenges.getPositionForView(view)));
                 drawView.setVisibility(View.VISIBLE);
-                challengeButton.setEnabled(false);
                 drawView.New(jsData, lstChallenges.getPositionForView(view));
                 dialog.dismiss();
             }

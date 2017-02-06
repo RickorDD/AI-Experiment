@@ -3,6 +3,7 @@ package de.reikodd.ddweki;
 import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.io.OutputStream;
@@ -54,12 +55,15 @@ public class URLPost extends AsyncTask<String, String, String> {
     @Override
     protected void onPostExecute(String result) {
         TextView txtViewDesc = (TextView) ((Activity) ctx).findViewById(R.id.description);
+        Button challengeButton = (Button) ((Activity) ctx).findViewById(R.id.challenges);
         if(result.equals("200")) {
             txtViewDesc.setText("send to database successful");
+            challengeButton.setEnabled(true);
         }
         else
         {
             txtViewDesc.setText("ERROR to send Data");
+            challengeButton.setEnabled(true);
         }
     }
 
