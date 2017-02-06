@@ -3,7 +3,6 @@ package de.reikodd.ddweki;
 import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.widget.TextView;
 
 import java.io.OutputStream;
@@ -46,10 +45,8 @@ public class URLPost extends AsyncTask<String, String, String> {
 
         } catch (MalformedURLException rat) {
             rat.printStackTrace();
-            //Log.i("Reiko", ""+rat);
             return "0";
         } catch (Exception rat) {
-            //Log.i("Reiko", ""+rat);
             return "0";
         }
     }

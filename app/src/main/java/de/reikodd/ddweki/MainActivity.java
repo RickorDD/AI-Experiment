@@ -16,8 +16,7 @@ public class MainActivity extends Activity implements View.OnClickListener, URLI
 
     private DrawingView drawView;
     private Button nextButton,saveButton,challengeButton;
-    private TextView txtViewDesc, txtViewData, txtViewNumberChallenges;
-    String DescString="";
+    private TextView txtViewDesc, txtViewData;
     static private Context context;
     public String jsData;
     public int numberChallenge;

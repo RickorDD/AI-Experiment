@@ -9,7 +9,6 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -24,9 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-/**
- * zeichnet eine Linie in ein Canvas
- */
 public class DrawingView extends View {
 
     private Path drawPath;
@@ -112,11 +108,14 @@ public class DrawingView extends View {
                     jsonXYTP.put("p", decimalFormat.format(event.getPressure()));
                     Button   nextButton = (Button ) ((Activity) context).findViewById(R.id.next);
                     Button saveButton = (Button) ((Activity) context).findViewById(R.id.save);
-                    nextButton.setEnabled(true);
+
 
                     if(allCharacter==true) {
-                        nextButton.setEnabled(false);
                         saveButton.setEnabled(true);
+                    }
+                    else
+                    {
+                        nextButton.setEnabled(true);
                     }
                     jsonCreate.addStroke(jsonXYTP.toString());
                     break;
@@ -147,8 +146,6 @@ public class DrawingView extends View {
         }
         if((JSONParser.getNumberDescSet(content,numberChallenge)-1)==characterChallenge)
         {
-            Button   nextButton = (Button ) ((Activity) context).findViewById(R.id.next);
-            nextButton.setEnabled(false);
             allCharacter=true;
         }
         strokes++;
