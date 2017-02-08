@@ -3,6 +3,7 @@ package de.reikodd.ddweki;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,6 +72,7 @@ public class MainActivity extends Activity implements View.OnClickListener, URLI
         if(view.getId()==R.id.challenges)
         {
             txtViewDesc.setText("Loading...");
+            challengeButton.setEnabled(false);
             putURLConnection();
         }
 
@@ -117,10 +119,17 @@ public class MainActivity extends Activity implements View.OnClickListener, URLI
         final AlertDialog.Builder mBuilder = new AlertDialog.Builder(MainActivity.this);
         final View mView = getLayoutInflater().inflate(R.layout.challenge_dialog, null);
         final TextView txtViewNumberChallenges = (TextView) mView.findViewById(R.id.txtChallenge);
-
         final ListView lstChallenges = (ListView) mView.findViewById(R.id.listChallenge);
         mBuilder.setView(mView);
         final AlertDialog dialog = mBuilder.create();
+
+        dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                challengeButton.setEnabled(true);
+            }
+        });
+
 
         ArrayAdapter listAdapater = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_2, android.R.id.text1, IntToArray.getArray(JSONParser.getNumberChallenges(jsData)))
         {
@@ -152,6 +161,7 @@ public class MainActivity extends Activity implements View.OnClickListener, URLI
             }
         });
 
+
         if (numberChallenge>1) {
             txtViewNumberChallenges.setText(JSONParser.getNumberChallenges(jsData) + " Challenges");
         }
@@ -159,8 +169,8 @@ public class MainActivity extends Activity implements View.OnClickListener, URLI
         {
             txtViewNumberChallenges.setText(JSONParser.getNumberChallenges(jsData) + " Challenge");
         }
-
         dialog.setCancelable(true);
         dialog.show();
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, 500);
     }
 }
