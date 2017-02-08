@@ -15,7 +15,7 @@ import android.widget.TextView;
 public class MainActivity extends Activity implements View.OnClickListener, URLInterface {
 
     private DrawingView drawView;
-    private Button nextButton,saveButton,challengeButton;
+    private Button nextButton,saveButton,challengeButton,cancelButton;
     private TextView txtViewDesc, txtViewData;
     static private Context context;
     public String jsData;
@@ -38,6 +38,12 @@ public class MainActivity extends Activity implements View.OnClickListener, URLI
 
         challengeButton = (Button) findViewById(R.id.challenges);
         challengeButton.setOnClickListener(this);
+        challengeButton.setEnabled(true);
+
+        cancelButton = (Button) findViewById(R.id.cancel);
+        cancelButton.setOnClickListener(this);
+        cancelButton.setEnabled(false);
+
         txtViewDesc = (TextView) findViewById(R.id.description);
         txtViewData = (TextView) findViewById(R.id.Data);
         drawView.setVisibility(View.INVISIBLE);
@@ -57,6 +63,7 @@ public class MainActivity extends Activity implements View.OnClickListener, URLI
         {
             drawView.Save(jsData, numberChallenge);
             saveButton.setEnabled(false);
+            txtViewDesc.setText("send to server...");
             txtViewData.setText("");
             drawView.setVisibility(View.INVISIBLE);
         }
@@ -64,8 +71,19 @@ public class MainActivity extends Activity implements View.OnClickListener, URLI
         if(view.getId()==R.id.challenges)
         {
             txtViewDesc.setText("Loading...");
-            challengeButton.setEnabled(false);
             putURLConnection();
+        }
+
+        if(view.getId()==R.id.cancel)
+        {
+            txtViewDesc.setText("");
+            txtViewData.setText("");
+            nextButton.setEnabled(false);
+            saveButton.setEnabled(false);
+            cancelButton.setEnabled(false);
+            challengeButton.setEnabled(true);
+            drawView.setVisibility(View.INVISIBLE);
+            drawView.Cancel();
         }
     }
 
@@ -128,6 +146,8 @@ public class MainActivity extends Activity implements View.OnClickListener, URLI
                 + " - " + JSONParser.getDetailsChallenge(jsData, lstChallenges.getPositionForView(view)));
                 drawView.setVisibility(View.VISIBLE);
                 drawView.New(jsData, lstChallenges.getPositionForView(view));
+                cancelButton.setEnabled(true);
+                challengeButton.setEnabled(false);
                 dialog.dismiss();
             }
         });
@@ -140,7 +160,7 @@ public class MainActivity extends Activity implements View.OnClickListener, URLI
             txtViewNumberChallenges.setText(JSONParser.getNumberChallenges(jsData) + " Challenge");
         }
 
-        dialog.setCancelable(false);
+        dialog.setCancelable(true);
         dialog.show();
     }
 }

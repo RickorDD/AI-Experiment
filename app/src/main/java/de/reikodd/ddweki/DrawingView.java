@@ -108,9 +108,10 @@ public class DrawingView extends View {
                     jsonXYTP.put("p", decimalFormat.format(event.getPressure()));
                     Button   nextButton = (Button ) ((Activity) context).findViewById(R.id.next);
                     Button saveButton = (Button) ((Activity) context).findViewById(R.id.save);
-
+                    Button cancelButton = (Button) ((Activity) context).findViewById(R.id.cancel);
 
                     if(allCharacter==true) {
+                        cancelButton.setEnabled(false);
                         saveButton.setEnabled(true);
                     }
                     else
@@ -154,6 +155,15 @@ public class DrawingView extends View {
         invalidate();
         startTime = System.currentTimeMillis();
     }
+
+    public void Cancel()
+    {
+        strokes = 0;
+        characterChallenge=0;
+        allCharacter=false;
+        archive.clear();
+    }
+
 
     public void Save(String content, int numberChallenge) {
         archive.add(jsonCreate.getJSON(JSONParser.getCharacterDescSet(content, numberChallenge, characterChallenge-1)));
