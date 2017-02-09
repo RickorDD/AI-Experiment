@@ -111,7 +111,6 @@ public class DrawingView extends View {
                     Button cancelButton = (Button) ((Activity) context).findViewById(R.id.cancel);
 
                     if(allCharacter==true) {
-                        cancelButton.setEnabled(false);
                         saveButton.setEnabled(true);
                     }
                     else
@@ -179,6 +178,6 @@ public class DrawingView extends View {
         characterChallenge=0;
         allCharacter=false;
         archive.clear();
-        new URLPost(context).execute("https://sheltered-fjord-46378.herokuapp.com/api/submissions", sb.toString());
+        new URLPost(context).execute("https://touchrecorderweb.herokuapp.com/api/submissions", sb.toString());
     }
 }

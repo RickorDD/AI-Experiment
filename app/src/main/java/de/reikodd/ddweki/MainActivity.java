@@ -64,6 +64,7 @@ public class MainActivity extends Activity implements View.OnClickListener, URLI
         {
             drawView.Save(jsData, numberChallenge);
             saveButton.setEnabled(false);
+            cancelButton.setEnabled(false);
             txtViewDesc.setText("send to server...");
             txtViewData.setText("");
             drawView.setVisibility(View.INVISIBLE);
@@ -90,7 +91,7 @@ public class MainActivity extends Activity implements View.OnClickListener, URLI
     }
 
     private void putURLConnection(){
-        new URLConnection(MainActivity.this).execute("https://sheltered-fjord-46378.herokuapp.com/api/challenges");
+        new URLConnection(MainActivity.this).execute("https://touchrecorderweb.herokuapp.com/api/challenges");
     }
 
 
