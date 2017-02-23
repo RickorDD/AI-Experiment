@@ -26,7 +26,7 @@ public class JSONCreate {
 
     public String getJSON(String description) {
         return "{\"client\":\"" + Build.MODEL + "\","
-                + "\"description\":\"Draw: " + description + "\"," +
+                + "\"description\":\"" + description + "\"," +
                 "\"strokes\":[" + TextUtils.join(",", strokes) + "]}";
     }
 
