@@ -2,7 +2,6 @@ package de.reikodd.ddweki;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
@@ -18,7 +17,6 @@ public class MainActivity extends Activity implements View.OnClickListener, URLI
     private DrawingView drawView;
     private Button nextButton,saveButton,challengeButton,cancelButton;
     private TextView txtViewDesc, txtViewData;
-    static private Context context;
     public String jsData;
     public int numberChallenge;
 
@@ -26,7 +24,6 @@ public class MainActivity extends Activity implements View.OnClickListener, URLI
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        context=getBaseContext();
         setContentView(R.layout.activity_main);
         drawView = (DrawingView)findViewById(R.id.drawing);
         nextButton = (Button)findViewById(R.id.next);
@@ -39,7 +36,7 @@ public class MainActivity extends Activity implements View.OnClickListener, URLI
 
         challengeButton = (Button) findViewById(R.id.challenges);
         challengeButton.setOnClickListener(this);
-        challengeButton.setEnabled(true);
+        challengeButton.setEnabled(false);
 
         cancelButton = (Button) findViewById(R.id.cancel);
         cancelButton.setOnClickListener(this);
@@ -48,7 +45,8 @@ public class MainActivity extends Activity implements View.OnClickListener, URLI
         txtViewDesc = (TextView) findViewById(R.id.description);
         txtViewData = (TextView) findViewById(R.id.Data);
         drawView.setVisibility(View.INVISIBLE);
-        getActionBar().setTitle("DDWEKI     Version:" + BuildConfig.VERSION_NAME);
+        getActionBar().setTitle("TouchRecorder - Version:" + BuildConfig.VERSION_NAME);
+        putURLConnection();
     }
 
     @Override
@@ -65,6 +63,7 @@ public class MainActivity extends Activity implements View.OnClickListener, URLI
             drawView.Save(jsData, numberChallenge);
             saveButton.setEnabled(false);
             cancelButton.setEnabled(false);
+            txtViewDesc.setTextSize(22);
             txtViewDesc.setText("send to server...");
             txtViewData.setText("");
             drawView.setVisibility(View.INVISIBLE);
@@ -72,6 +71,7 @@ public class MainActivity extends Activity implements View.OnClickListener, URLI
 
         if(view.getId()==R.id.challenges)
         {
+            txtViewDesc.setTextSize(22);
             txtViewDesc.setText("Loading...");
             challengeButton.setEnabled(false);
             putURLConnection();
@@ -152,6 +152,7 @@ public class MainActivity extends Activity implements View.OnClickListener, URLI
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 numberChallenge=lstChallenges.getPositionForView(view);
+                txtViewDesc.setTextSize(15);
                 txtViewDesc.setText(JSONParser.getNameChallenge(jsData, lstChallenges.getPositionForView(view))
                 + " - " + JSONParser.getDetailsChallenge(jsData, lstChallenges.getPositionForView(view)));
                 drawView.setVisibility(View.VISIBLE);
@@ -172,6 +173,8 @@ public class MainActivity extends Activity implements View.OnClickListener, URLI
         }
         dialog.setCancelable(true);
         dialog.show();
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, 500);
+        int width = (int)(getResources().getDisplayMetrics().widthPixels*0.95);
+        int height = (int)(getResources().getDisplayMetrics().heightPixels*0.95);
+        dialog.getWindow().setLayout(width, height);
     }
 }

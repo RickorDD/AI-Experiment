@@ -30,7 +30,7 @@ public class DrawingView extends View {
     private Canvas drawCanvas;
     private Bitmap canvasBitmap;
     static long startTime = 0;
-    String reqName = "Reiko";
+    String reqName = "AndroidApp";
     static List<String> archive = new ArrayList<String>();
     static int strokes = 0;
     static int characterChallenge=0;
@@ -139,6 +139,7 @@ public class DrawingView extends View {
         drawCanvas.drawColor(0, PorterDuff.Mode.CLEAR);
 
         TextView txtViewData = (TextView) ((Activity) context).findViewById(R.id.Data);
+        txtViewData.setTextSize(18);
         txtViewData.setText("Draw a \"" + JSONParser.getCharacterDescSet(content, numberChallenge, characterChallenge)+ "\"");
         if (strokes!=0)
         {
