@@ -91,8 +91,7 @@ public class MainActivity extends Activity implements View.OnClickListener, URLI
     }
 
     private void putURLConnection(){
-        //new URLConnection(MainActivity.this).execute("https://touchrecorderweb.herokuapp.com/api/challenges");
-        new URLConnection(MainActivity.this).execute("https://powerful-dusk-76666.herokuapp.com/api/challenges");
+        new URLConnection(MainActivity.this).execute("https://touchrecorderweb.herokuapp.com/api/challenges");
     }
 
 

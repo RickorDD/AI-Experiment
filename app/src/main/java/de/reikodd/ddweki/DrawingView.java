@@ -178,6 +178,6 @@ public class DrawingView extends View {
         characterChallenge=0;
         allCharacter=false;
         archive.clear();
-        new URLPost(context).execute("https://powerful-dusk-76666.herokuapp.com/api/submissions", sb.toString());
+        new URLPost(context).execute("https://touchrecorderweb.herokuapp.com/api/submissions", sb.toString());
     }
 }
