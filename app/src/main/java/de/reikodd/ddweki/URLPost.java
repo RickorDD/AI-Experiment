@@ -1,6 +1,7 @@
 package de.reikodd.ddweki;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.Button;
@@ -57,12 +58,12 @@ public class URLPost extends AsyncTask<String, String, String> {
         TextView txtViewDesc = (TextView) ((Activity) ctx).findViewById(R.id.description);
         Button challengeButton = (Button) ((Activity) ctx).findViewById(R.id.challenges);
         if(result.equals("200")) {
-            txtViewDesc.setText("send to database successful");
+            txtViewDesc.setText("Challenge send to Server!");
             challengeButton.setEnabled(true);
         }
         else
         {
-            txtViewDesc.setText("ERROR to send Data");
+            txtViewDesc.setText("Error, Challenge not send!");
             challengeButton.setEnabled(true);
         }
     }
